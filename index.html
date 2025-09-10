@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated background particles */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(15, 15, 35, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #8b5cf6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #8b5cf6;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(45deg, #8b5cf6, #06b6d4);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffffff, #8b5cf6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero-content .description {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(45deg, #8b5cf6, #06b6d4);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            animation: fadeInUp 1s ease 0.6s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(45deg, #ffffff, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Portfolio Grid */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(45deg, #8b5cf6, #06b6d4, #10b981);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .project-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #8b5cf6, #06b6d4);
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .project-card:hover .project-image::before {
+            opacity: 1;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .project-description {
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            padding: 0.3rem 0.8rem;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #c084fc;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .project-link {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .project-link:hover {
+            background: rgba(139, 92, 246, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .skill-category {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.2);
+        }
+
+        .skill-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #8b5cf6, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .skill-list {
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .skill-list li {
+            padding: 0.3rem 0;
+            color: #94a3b8;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(15, 15, 35, 0.9);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-link {
+            display: inline-block;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            text-decoration: none;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: linear-gradient(45deg, #8b5cf6, #06b6d4);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">Your Name</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Creative Developer</h1>
+            <p class="subtitle">Crafting Digital Experiences</p>
+            <p class="description">I'm a passionate developer who loves creating beautiful, functional, and user-friendly digital experiences. Welcome to my creative space.</p>
+            <a href="#portfolio" class="cta-button">View My Work</a>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="section">
+        <h2 class="section-title fade-in">My Portfolio</h2>
+        <div class="portfolio-grid">
+            <!-- Project Card Template - Duplicate and modify as needed -->
+            <div class="project-card fade-in">
+                <div class="project-image">🚀</div>
+                <h3 class="project-title">Project Name</h3>
+                <p class="project-description">Brief description of your amazing project and what technologies you used to build it.</p>
+                <div class="project-tags">
+                    <span class="tag">React</span>
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">CSS</span>
+                </div>
+                <div class="project-links">
+                    <a href="#" class="project-link">Live Demo</a>
+                    <a href="#" class="project-link">GitHub</a>
+                </div>
+            </div>
+
+            <div class="project-card fade-in">
+                <div class="project-image">🎨</div>
+                <h3 class="project-title">Creative Project</h3>
+                <p class="project-description">Another exciting project showcasing your creativity and technical skills in web development.</p>
+                <div class="project-tags">
+                    <span class="tag">Vue.js</span>
+                    <span class="tag">Node.js</span>
+                    <span class="tag">MongoDB</span>
+                </div>
+                <div class="project-links">
+                    <a href="#" class="project-link">Live Demo</a>
+                    <a href="#" class="project-link">GitHub</a>
+                </div>
+            </div>
+
+            <div class="project-card fade-in">
+                <div class="project-image">⚡</div>
+                <h3 class="project-title">Performance App</h3>
+                <p class="project-description">A high-performance application that demonstrates your ability to create fast, scalable solutions.</p>
+                <div class="project-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">Django</span>
+                    <span class="tag">PostgreSQL</span>
+                </div>
+                <div class="project-links">
+                    <a href="#" class="project-link">Live Demo</a>
+                    <a href="#" class="project-link">GitHub</a>
+                </div>
+            </div>
+
+            <div class="project-card fade-in">
+                <div class="project-image">🌟</div>
+                <h3 class="project-title">Mobile Experience</h3>
+                <p class="project-description">A mobile-first application showcasing responsive design and modern user experience principles.</p>
+                <div class="project-tags">
+                    <span class="tag">React Native</span>
+                    <span class="tag">TypeScript</span>
+                    <span class="tag">Firebase</span>
+                </div>
+                <div class="project-links">
+                    <a href="#" class="project-link">Live Demo</a>
+                    <a href="#" class="project-link">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+        <h2 class="section-title fade-in">Skills & Expertise</h2>
+        <div class="skills-grid">
+            <div class="skill-category fade-in">
+                <div class="skill-icon">💻</div>
+                <h3>Frontend</h3>
+                <ul class="skill-list">
+                    <li>React & Vue.js</li>
+                    <li>JavaScript & TypeScript</li>
+                    <li>HTML5 & CSS3</li>
+                    <li>Responsive Design</li>
+                </ul>
+            </div>
+
+            <div class="skill-category fade-in">
+                <div class="skill-icon">⚙️</div>
+                <h3>Backend</h3>
+                <ul class="skill-list">
+                    <li>Node.js & Express</li>
+                    <li>Python & Django</li>
+                    <li>Database Design</li>
+                    <li>API Development</li>
+                </ul>
+            </div>
+
+            <div class="skill-category fade-in">
+                <div class="skill-icon">🎨</div>
+                <h3>Design</h3>
+                <ul class="skill-list">
+                    <li>UI/UX Design</li>
+                    <li>Figma & Adobe XD</li>
+                    <li>Prototyping</li>
+                    <li>Design Systems</li>
+                </ul>
+            </div>
+
+            <div class="skill-category fade-in">
+                <div class="skill-icon">🚀</div>
+                <h3>Tools</h3>
+                <ul class="skill-list">
+                    <li>Git & GitHub</li>
+                    <li>Docker & AWS</li>
+                    <li>CI/CD Pipelines</li>
+                    <li>Performance Optimization</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="social-links">
+            <a href="#" class="social-link">📧</a>
+            <a href="#" class="social-link">💼</a>
+            <a href="#" class="social-link">🐱</a>
+            <a href="#" class="social-link">🐦</a>
+        </div>
+        <p>&copy; 2025 Your Name. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Animated background particles
+        function createParticles() {
+            const bgAnimation = document.getElementById('bgAnimation');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = (Math.random() * 4 + 2) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                bgAnimation.appendChild(particle);
+            }
+        }
+
+        // Scroll animations
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        function smoothScrolling() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // Navigation background on scroll
+        function navbarScroll() {
+            const nav = document.querySelector('nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    nav.style.background = 'rgba(15, 15, 35, 0.95)';
+                } else {
+                    nav.style.background = 'rgba(15, 15, 35, 0.9)';
+                }
+            });
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            smoothScrolling();
+            navbarScroll();
+            animateOnScroll();
+            window.addEventListener('scroll', animateOnScroll);
+        });
+    </script>
+</body>
+</html>
